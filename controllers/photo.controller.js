@@ -2,35 +2,29 @@ const Photo = require("../models/photo.model");
 const { asyncHandler } = require("../middleware/async.middleware");
 exports.createPhoto = asyncHandler(async (req, res) => {
 
-const {
+    const { title, description, category } = req.body;
+
+    const photo = await Photo.create({
+
         title,
+
         description,
-        imageUrl,
-        imageKey,
+
+        imageUrl: `/uploads/${req.file.filename}`,
+
+        imageKey: req.file.filename,
+
         category
-} = req.body;
 
+    });
 
-const photo = await Photo.create({
+    res.status(201).json({
 
-    title,
+        success: true,
 
-    description,
+        data: photo
 
-    imageUrl,
-
-    imageKey,
-
-    category
-
-}); 
-res.status(201).json({
-
-    success: true,
-
-    data: photo
-
-});
+    });
 
 });
 

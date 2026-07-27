@@ -8,12 +8,18 @@ const {
     handleValidationErrors
 } = require("../middleware/validation.middleware"); 
 
+const upload = require("../middleware/upload.middleware.js");
+
+
+
 router.get("/", photoController.getAllPhotos);
 
 router.get("/:id", photoController.getPhotoById);
 
+
 router.post(
     "/",
+    upload.single("image"),
     validateCreatePhoto,
     handleValidationErrors,
     photoController.createPhoto

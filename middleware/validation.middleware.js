@@ -16,9 +16,9 @@ exports.validateCreatePhoto = [
         .notEmpty()
         .withMessage("Description is required"),
 
-    body("imageUrl")
-        .isURL()
-        .withMessage("Image URL must be valid"),
+    // //body("imageUrl")
+    //     .isURL()
+    //     .withMessage("Image URL must be valid"),
 
     body("category")
         .notEmpty()
