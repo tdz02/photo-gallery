@@ -83,27 +83,18 @@ exports.updatePhoto = asyncHandler(async (req, res) => {
 
 exports.deletePhoto = asyncHandler(async (req, res) => {
 
-    const photo = await Photo.findByIdAndDelete(req.params.id);
+    const photo = await Photo.findById(req.params.id);
 
     if (!photo) {
 
-        return res.status(404).json({
-
-            success: false,
-
-            message: "Photo not found"
-
-        });
+        return res.status(404).send("Photo not found");
 
     }
 
-    res.status(200).json({
+    await photo.deleteOne();
 
-        success: true,
+    res.redirect("/gallery");
 
-        message: "Photo deleted successfully"
-
-    });
 });
  exports.renderGallery = asyncHandler(async (req, res) => {
 
