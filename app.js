@@ -18,7 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
-app.use("/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 3000;
 

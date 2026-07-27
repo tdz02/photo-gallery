@@ -1,21 +1,33 @@
 const Photo = require("../models/photo.model");
 const { asyncHandler } = require("../middleware/async.middleware");
 const Category = require("../models/category.model");
-
+const { deleteImage } = require("../services/s3.service");
 
 exports.createPhoto = asyncHandler(async (req, res) => {
 
     const { title, description, category } = req.body;
 
+    // Kiểm tra có upload file không
+    if (!req.file) {
+        return res.status(400).json({
+            success: false,
+            message: "Image is required"
+        });
+    }
+
+    // Upload ảnh lên S3
+    const { imageUrl, imageKey } = await uploadImage(req.file);
+
+    // Lưu MongoDB
     await Photo.create({
 
         title,
 
         description,
 
-        imageUrl: `/uploads/${req.file.filename}`,
+        imageUrl,
 
-        imageKey: req.file.filename,
+        imageKey,
 
         category
 
@@ -90,6 +102,8 @@ exports.deletePhoto = asyncHandler(async (req, res) => {
         return res.status(404).send("Photo not found");
 
     }
+
+    await deleteImage(photo.imageKey);
 
     await photo.deleteOne();
 
