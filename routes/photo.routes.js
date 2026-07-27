@@ -15,6 +15,8 @@ router.get("/view/:id", photoController.renderPhoto);
 
 router.get("/", photoController.getAllPhotos);
 
+router.get("/edit/:id", photoController.renderEditPage);
+
 router.get("/:id", photoController.getPhotoById);
 
 

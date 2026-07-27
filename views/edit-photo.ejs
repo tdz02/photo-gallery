@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-
-    <meta charset="UTF-8">
 
     <title>Edit Photo</title>
 
@@ -22,67 +20,66 @@
     method="POST"
 >
 
-    <div>
+<div>
 
-        <label>Title</label>
+<label>Title</label>
 
-        <input
-            type="text"
-            name="title"
-            value="<%= photo.title %>"
-            required
-        >
+<input
+    type="text"
+    name="title"
+    value="<%= photo.title %>"
+    required
+>
 
-    </div>
+</div>
 
-    <br>
+<br>
 
-    <div>
+<div>
 
-        <label>Description</label>
+<label>Description</label>
 
-        <textarea
-            name="description"
-            rows="4"
-            required
-        ><%= photo.description %></textarea>
+<textarea
+    name="description"
+    required
+><%= photo.description %></textarea>
 
-    </div>
+</div>
 
-    <br>
+<br>
 
-    <div>
+<div>
 
-        <label>Category</label>
+<label>Category</label>
 
-        <select name="category">
+<select name="category">
 
-            <% categories.forEach(category => { %>
+<% categories.forEach(category => { %>
 
-                <option
-                    value="<%= category._id %>"
-                    <%= category._id.toString() === photo.category._id.toString()
-                        ? "selected"
-                        : "" %>
-                >
+<option
+value="<%= category._id %>"
+<%= category._id.toString() === photo.category.toString()
+? "selected"
+: "" %>
+>
 
-                    <%= category.name %>
+<%= category.name %>
 
-                </option>
+</option>
 
-            <% }) %>
+<% }) %>
 
-        </select>
+</select>
 
-    </div>
+</div>
 
-    <br>
+<br>
 
-    <button type="submit">
+<button type="submit">
 
-        Save Changes
+Save Changes
 
-    </button>
+</button>
 
 </form>
 

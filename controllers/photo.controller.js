@@ -61,38 +61,23 @@ exports.getPhotoById = asyncHandler(async (req, res) => {
 
 exports.updatePhoto = asyncHandler(async (req, res) => {
 
-    const photo = await Photo.findByIdAndUpdate(
+    const { title, description, category } = req.body;
 
-        req.params.id,
-
-        req.body,
-
-        {
-            new: true,
-            runValidators: true
-        }
-
-    );
+    const photo = await Photo.findById(req.params.id);
 
     if (!photo) {
 
-        return res.status(404).json({
-
-            success: false,
-
-            message: "Photo not found"
-
-        });
+        return res.status(404).send("Photo not found");
 
     }
 
-    res.status(200).json({
+    photo.title = title;
+    photo.description = description;
+    photo.category = category;
 
-        success: true,
+    await photo.save();
 
-        data: photo
-
-    });
+    res.redirect("/gallery");
 
 });
 
@@ -156,6 +141,26 @@ exports.renderUploadPage = asyncHandler(async (req, res) => {
 
     res.render("upload", {
         title: "Upload Photo",
+        categories
+    });
+
+});
+
+exports.renderEditPage = asyncHandler(async (req, res) => {
+
+    
+
+    const photo = await Photo.findById(req.params.id);
+
+    if (!photo) {
+        return res.status(404).send("Photo not found");
+    }
+
+    const categories = await Category.find();
+
+    res.render("edit-photo", {
+        title: "Edit Photo",
+        photo,
         categories
     });
 
