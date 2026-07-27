@@ -11,7 +11,7 @@ const {
 
 const upload = require("../middleware/upload.middleware.js");
 
-
+router.get("/view/:id", photoController.renderPhoto);
 
 router.get("/", photoController.getAllPhotos);
 

@@ -1,10 +1,13 @@
 const Photo = require("../models/photo.model");
 const { asyncHandler } = require("../middleware/async.middleware");
+const Category = require("../models/category.model");
+
+
 exports.createPhoto = asyncHandler(async (req, res) => {
 
     const { title, description, category } = req.body;
 
-    const photo = await Photo.create({
+    await Photo.create({
 
         title,
 
@@ -18,13 +21,7 @@ exports.createPhoto = asyncHandler(async (req, res) => {
 
     });
 
-    res.status(201).json({
-
-        success: true,
-
-        data: photo
-
-    });
+    res.redirect("/gallery");
 
 });
 
@@ -121,6 +118,45 @@ exports.deletePhoto = asyncHandler(async (req, res) => {
 
         message: "Photo deleted successfully"
 
+    });
+});
+ exports.renderGallery = asyncHandler(async (req, res) => {
+
+    const photos = await Photo.find()
+        .populate("category")
+        .sort({ createdAt: -1 });
+
+    res.render("gallery", {
+        title: "Photo Gallery",
+        photos
+    });
+
+});
+exports.renderPhoto = asyncHandler(async (req, res) => {
+
+    const photo = await Photo.findById(req.params.id)
+        .populate("category");
+
+    if (!photo) {
+        return res.status(404).render("404", {
+            message: "Photo not found"
+        });
+    }
+
+    res.render("photo", {
+        title: photo.title,
+        photo
+    });
+
+});
+
+exports.renderUploadPage = asyncHandler(async (req, res) => {
+
+    const categories = await Category.find();
+
+    res.render("upload", {
+        title: "Upload Photo",
+        categories
     });
 
 });

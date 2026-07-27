@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title><%= title %></title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Upload Photo</h1>
+
+    <form
+        action="/photos"
+        method="POST"
+        enctype="multipart/form-data"
+    >
+
+        <div>
+
+            <label>Title</label>
+
+            <input
+                type="text"
+                name="title"
+                required
+            >
+
+        </div>
+
+        <br>
+
+        <div>
+
+            <label>Description</label>
+
+            <textarea
+                name="description"
+                rows="4"
+                required
+            ></textarea>
+
+        </div>
+
+        <br>
+
+        <div>
+
+            <label>Category</label>
+
+            <select
+                name="category"
+                required
+            >
+
+                <% categories.forEach(category => { %>
+
+                    <option value="<%= category._id %>">
+
+                        <%= category.name %>
+
+                    </option>
+
+                <% }) %>
+
+            </select>
+
+        </div>
+
+        <br>
+
+        <div>
+
+            <label>Choose Image</label>
+
+            <input
+                type="file"
+                name="image"
+                accept="image/*"
+                required
+            >
+
+        </div>
+
+        <br>
+
+        <button type="submit">
+
+            Upload Photo
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+
+</html>

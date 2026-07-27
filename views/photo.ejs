@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title><%= photo.title %></title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <a href="/gallery">
+        ← Back to Gallery
+    </a>
+
+    <div class="photo-detail">
+
+        <img
+            src="<%= photo.imageUrl %>"
+            alt="<%= photo.title %>"
+        >
+
+        <h1><%= photo.title %></h1>
+
+        <p>
+
+            <strong>Description:</strong>
+
+            <%= photo.description %>
+
+        </p>
+
+        <p>
+
+            <strong>Category:</strong>
+
+            <%= photo.category.name %>
+
+        </p>
+
+        <p>
+
+            <strong>Created:</strong>
+
+            <%= photo.createdAt.toLocaleDateString() %>
+
+        </p>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>
