@@ -17,6 +17,7 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 const { errorHandler } = require("./middleware/error.middleware");
+const photoRoutes = require("./routes/photo.routes");
 const categoryRoutes = require("./routes/category.routes");
 const webRoutes = require("./routes/web.routes");
 
@@ -28,6 +29,8 @@ const connectDB = require("./config/database");
 connectDB();
 
 app.set("view engine", "ejs");
+
+app.use("/photos", photoRoutes);    
 
 app.use("/categories", categoryRoutes);
 
