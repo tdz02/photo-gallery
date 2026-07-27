@@ -1,7 +1,8 @@
 const Photo = require("../models/photo.model");
 const { asyncHandler } = require("../middleware/async.middleware");
 const Category = require("../models/category.model");
-const { deleteImage } = require("../services/s3.service");
+const { uploadImage, deleteImage } = require("../services/s3.service");
+
 
 exports.createPhoto = asyncHandler(async (req, res) => {
 
