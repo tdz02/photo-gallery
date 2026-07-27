@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { requireImage } = require("../middleware/file.middleware");
 
 const photoController = require("../controllers/photo.controller");
 
@@ -20,6 +21,7 @@ router.get("/:id", photoController.getPhotoById);
 router.post(
     "/",
     upload.single("image"),
+    requireImage,
     validateCreatePhoto,
     handleValidationErrors,
     photoController.createPhoto
