@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+</head>
+<body>
+<%- include("partials/header") %>
+
+<h2><%= title %></h2>
+
+<p><%= message %></p>
+
+<p>Version: <%= version %></p>
+
+<h3>Categories</h3>
+
+<ul>
+
+    <% categories.forEach(category => { %>
+
+        <li><%= category %></li>
+
+    <% }) %>
+
+</ul>
+
+<%- include("partials/footer") %>
+</body>
+</html>
