@@ -5,10 +5,8 @@ const { uploadImage, deleteImage } = require("../services/s3.service");
 
 
 exports.createPhoto = asyncHandler(async (req, res) => {
-
     const { title, description, category } = req.body;
 
-    // Kiểm tra có upload file không
     if (!req.file) {
         return res.status(400).json({
             success: false,
@@ -16,26 +14,30 @@ exports.createPhoto = asyncHandler(async (req, res) => {
         });
     }
 
-    // Upload ảnh lên S3
+    if (
+        !Buffer.isBuffer(req.file.buffer) ||
+        req.file.buffer.length === 0
+    ) {
+        return res.status(400).json({
+            success: false,
+            message: "Uploaded image is empty"
+        });
+    }
+
+    console.log("File size:", req.file.size);
+    console.log("Buffer length:", req.file.buffer.length);
+
     const { imageUrl, imageKey } = await uploadImage(req.file);
 
-    // Lưu MongoDB
     await Photo.create({
-
         title,
-
         description,
-
         imageUrl,
-
         imageKey,
-
         category
-
     });
 
-    res.redirect("/gallery");
-
+    return res.redirect("/gallery");
 });
 
 exports.getAllPhotos = asyncHandler(async (req, res) => {
