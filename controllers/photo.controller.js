@@ -14,21 +14,9 @@ exports.createPhoto = asyncHandler(async (req, res) => {
         });
     }
 
-    console.log("UPLOAD DEBUG:", {
-        fieldname: req.file.fieldname,
-        originalname: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.size,
-        isBuffer: Buffer.isBuffer(req.file.buffer),
-        bufferLength: req.file.buffer?.length
-    });
+   
+    
 
-    if (!Buffer.isBuffer(req.file.buffer) || req.file.buffer.length === 0) {
-        return res.status(400).json({
-            success: false,
-            message: "Uploaded image is empty"
-        });
-    }
 
     const { imageUrl, imageKey } = await uploadImage(req.file);
 
