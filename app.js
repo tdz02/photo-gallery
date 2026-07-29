@@ -63,9 +63,9 @@ const connectDB = require("./config/database");
 
 connectDB();
 
-app.set("view engine", "ejs");
+app.set("view engine", "ejs");  
 
-app.use("/photos", photoRoutes);    
+app.use("/photos", photoRoutes);
 
 app.use("/categories", categoryRoutes);
 

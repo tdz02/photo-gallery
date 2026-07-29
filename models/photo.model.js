@@ -38,6 +38,19 @@ likes: {
     default: 0
 },
 
+owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+},
+
+likedBy: [
+    {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+    }
+]
+
 }, {
     timestamps: true
 });

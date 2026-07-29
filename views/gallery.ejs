@@ -36,7 +36,7 @@
                         </strong>
                     </span>
 
-                    <a href="/photos/create">
+                    <a href="/photos/Upload">
                         Upload photo
                     </a>
 
@@ -202,14 +202,32 @@
                                 <%= photo.category?.name || "No category" %>
                             </span>
 
+                            <p>
+                            Uploaded by
+                            <strong>
+                                <%= photo.owner?.username || "Unknown user" %>
+                            </strong>
+                             </p>
+
                             <div class="card-actions">
 
+                                <%
+                                    const hasLiked =
+                                    currentUser &&
+                                    photo.likedBy &&
+                                    photo.likedBy.some(
+                                    (userId) =>
+                                     userId.toString() === currentUser.id
+                                    );
+                                %>
+
                                 <button
-                                    type="button"
-                                    class="like-button"
-                                    data-id="<%= photo._id %>"
-                                    aria-label="Like <%= photo.title || "photo" %>"
-                                    aria-pressed="false"
+                                type="button"
+                                class="like-button <%= hasLiked ? "is-liked" : "" %>"
+                                data-id="<%= photo._id %>"
+                                aria-label="Like <%= photo.title || "photo" %>"
+                                aria-pressed="<%= hasLiked ? "true" : "false" %>"
+                                <%= currentUser ? "" : "disabled" %>
                                 >
 
                                     <svg
@@ -334,8 +352,15 @@
 
                     likeCount.textContent = data.likes;
 
-                    button.classList.add("is-liked");
-                    button.setAttribute("aria-pressed", "true");
+                    button.classList.toggle(
+                        "is-liked",
+                        data.liked
+                    );
+
+                    button.setAttribute(
+                        "aria-pressed",
+                        data.liked ? "true" : "false"
+                    );
 
                     button.classList.remove("like-animation");
 

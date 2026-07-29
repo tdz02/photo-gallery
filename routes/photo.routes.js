@@ -8,8 +8,10 @@ const {
     handleValidationErrors
 } = require("../middleware/validation.middleware"); 
 const {
-    requireAuth
+    requireAuth,
+    requirePhotoOwner
 } = require("../middleware/auth.middleware");
+
 
 
 router.get(
@@ -23,9 +25,19 @@ router.get("/view/:id", photoController.renderPhoto);
 
 router.get("/", photoController.getAllPhotos);
 
-router.get("/edit/:id", photoController.renderEditPage);
+router.get(
+    "/:id/edit",
+    requireAuth,
+    requirePhotoOwner,
+    photoController.renderEditPage
+);
 
 router.get("/:id", photoController.getPhotoById);
+
+router.get(
+    "/",
+    photoController.getAllPhotos
+);
 
 
 router.post(
@@ -39,12 +51,23 @@ router.post(
 
 router.post(
     "/:id/like",
+    requireAuth,
     photoController.likePhoto
 );
 
-router.put("/:id", photoController.updatePhoto);
+router.put(
+    "/:id",
+    requireAuth,
+    requirePhotoOwner,
+    photoController.updatePhoto
+);
 
-router.delete("/:id", photoController.deletePhoto);
+router.delete(
+    "/:id",
+    requireAuth,
+    requirePhotoOwner,
+    photoController.deletePhoto
+);
 
 
 module.exports = router;

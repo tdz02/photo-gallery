@@ -25,7 +25,8 @@ exports.createPhoto = asyncHandler(async (req, res) => {
         description,
         imageUrl,
         imageKey,
-        category
+        category,
+        owner: req.session.user.id
     });
 
     return res.redirect("/gallery");
@@ -34,7 +35,8 @@ exports.createPhoto = asyncHandler(async (req, res) => {
 exports.getAllPhotos = asyncHandler(async (req, res) => {
 
     const photos = await Photo.find()
-        .populate("category");
+    .populate("category")
+    .populate("owner", "username"); 
 
     res.status(200).json({
 
@@ -157,6 +159,7 @@ exports.renderGallery = asyncHandler(async (req, res) => {
 
     const photos = await Photo.find(filter)
         .populate("category")
+        .populate("owner", "username")
         .sort(sortOptions[selectedSort])
         .skip(skip)
         .limit(limit);
@@ -221,18 +224,7 @@ exports.renderEditPage = asyncHandler(async (req, res) => {
 });
 
 exports.likePhoto = asyncHandler(async (req, res) => {
-
-    const photo = await Photo.findByIdAndUpdate(
-        req.params.id,
-        {
-            $inc: {
-                likes: 1
-            }
-        },
-        {
-         returnDocument: "after"
-        }
-    );
+    const photo = await Photo.findById(req.params.id);
 
     if (!photo) {
         return res.status(404).json({
@@ -241,12 +233,33 @@ exports.likePhoto = asyncHandler(async (req, res) => {
         });
     }
 
-    res.json({
+    if (!Array.isArray(photo.likedBy)) {
+    photo.likedBy = [];
+    }
 
+    const userId = req.session.user.id;
+
+    const hasLiked = photo.likedBy.some(
+        (likedUserId) =>
+            likedUserId.toString() === userId
+    );
+
+    if (hasLiked) {
+        photo.likedBy = photo.likedBy.filter(
+            (likedUserId) =>
+                likedUserId.toString() !== userId
+        );
+    } else {
+        photo.likedBy.push(userId);
+    }
+
+    photo.likes = photo.likedBy.length;
+
+    await photo.save();
+
+    return res.json({
         success: true,
-
+        liked: !hasLiked,
         likes: photo.likes
-
     });
-
 });
