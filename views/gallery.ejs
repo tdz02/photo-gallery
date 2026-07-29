@@ -37,6 +37,10 @@ Search
 
 </form>
 
+<p class="gallery-result-count">
+    Found <%= totalPhotos %> photo(s)
+</p>
+
 <br>
 
 <% if (photos.length === 0) { %>
@@ -77,6 +81,45 @@ Search
 <% } %>
 
 </div>
+
+<% if (totalPages > 1) { %>
+
+    <nav class="pagination">
+
+        <% if (currentPage > 1) { %>
+
+            <a
+                href="/gallery?page=<%= currentPage - 1 %>&search=<%= encodeURIComponent(search) %>"
+            >
+                Previous
+            </a>
+
+        <% } %>
+
+        <% for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) { %>
+
+            <a
+                href="/gallery?page=<%= pageNumber %>&search=<%= encodeURIComponent(search) %>"
+                class="<%= pageNumber === currentPage ? 'active' : '' %>"
+            >
+                <%= pageNumber %>
+            </a>
+
+        <% } %>
+
+        <% if (currentPage < totalPages) { %>
+
+            <a
+                href="/gallery?page=<%= currentPage + 1 %>&search=<%= encodeURIComponent(search) %>"
+            >
+                Next
+            </a>
+
+        <% } %>
+
+    </nav>
+
+<% } %>
 
 </body>
 

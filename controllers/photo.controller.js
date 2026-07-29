@@ -104,8 +104,12 @@ exports.deletePhoto = asyncHandler(async (req, res) => {
     res.redirect("/gallery");
 
 });
- exports.renderGallery = asyncHandler(async (req, res) => {
+exports.renderGallery = asyncHandler(async (req, res) => {
     const search = req.query.search?.trim() || "";
+
+    const requestedPage = parseInt(req.query.page) || 1;
+
+    const limit = 2;
 
     const filter = {};
 
@@ -126,14 +130,33 @@ exports.deletePhoto = asyncHandler(async (req, res) => {
         ];
     }
 
+    const totalPhotos = await Photo.countDocuments(filter);
+
+    const totalPages = Math.max(
+        1,
+        Math.ceil(totalPhotos / limit)
+    );
+
+    const currentPage = Math.min(
+        Math.max(requestedPage, 1),
+        totalPages
+    );
+
+    const skip = (currentPage - 1) * limit;
+
     const photos = await Photo.find(filter)
         .populate("category")
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
 
     res.render("gallery", {
         title: "Photo Gallery",
         photos,
-        search
+        search,
+        currentPage,
+        totalPages,
+        totalPhotos
     });
 });
 exports.renderPhoto = asyncHandler(async (req, res) => {

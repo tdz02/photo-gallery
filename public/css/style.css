@@ -139,3 +139,38 @@ h1{
 .search-form a {
     text-decoration: none;
 }
+
+.gallery-result-count {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 32px 0;
+}
+
+.pagination a {
+    min-width: 40px;
+    padding: 9px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    text-align: center;
+    text-decoration: none;
+    color: #222;
+}
+
+.pagination a:hover {
+    background: #eee;
+}
+
+.pagination a.active {
+    background: #222;
+    color: white;
+    border-color: #222;
+}
