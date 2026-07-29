@@ -106,13 +106,27 @@ exports.deletePhoto = asyncHandler(async (req, res) => {
 });
  exports.renderGallery = asyncHandler(async (req, res) => {
 
-    const photos = await Photo.find()
-        .populate("category")
-        .sort({ createdAt: -1 });
+    const search = req.query.search || "";
+
+    const photos = await Photo.find({
+
+        title: {
+
+            $regex: search,
+
+            $options: "i"
+
+        }
+
+    })
+    .populate("category");
 
     res.render("gallery", {
-        title: "Photo Gallery",
-        photos
+
+        photos,
+
+        search
+
     });
 
 });

@@ -9,6 +9,27 @@
 <body>
 
 <h1>Photo Gallery</h1>
+<form
+    action="/gallery"
+    method="GET"
+>
+
+<input
+    type="text"
+    name="search"
+    placeholder="Search photos..."
+    value="<%= search %>"
+>
+
+<button type="submit">
+
+Search
+
+</button>
+
+</form>
+
+<br>
 
 <div class="gallery">
 
