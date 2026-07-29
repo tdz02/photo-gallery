@@ -9,8 +9,21 @@ router.get(
     authController.showRegisterPage
 );
 
+const {
+    registerValidation
+} = require("../middleware/auth.validation");
+
+const {
+    handleAuthValidation
+} = require("../middleware/validation.middleware");
+    
 router.post(
     "/register",
+
+    registerValidation,
+
+    handleAuthValidation,
+
     authController.registerUser
 );
 

@@ -47,3 +47,27 @@ exports.handleValidationErrors = (req, res, next) => {
     });
 
 };
+
+
+exports.handleAuthValidation = (req, res, next) => {
+
+    const result = validationResult(req);
+
+    if (result.isEmpty()) {
+        return next();
+    }
+
+    return res.status(400).render("register", {
+
+        title: "Register",
+
+        errors: result.array().map(error => error.msg),
+
+        oldInput: {
+            username: req.body.username,
+            email: req.body.email
+        }
+
+    });
+
+};
