@@ -29,6 +29,11 @@ router.post(
     photoController.createPhoto
 );
 
+router.post(
+    "/:id/like",
+    photoController.likePhoto
+);
+
 router.put("/:id", photoController.updatePhoto);
 
 router.delete("/:id", photoController.deletePhoto);

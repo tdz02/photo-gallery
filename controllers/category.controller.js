@@ -1,5 +1,5 @@
 const Category = require("../models/category.model");
-const { asyncHandler } = require("../middleware/async.middleware");
+const asyncHandler = require("../middleware/async.middleware");
 const {
     sendSuccess,
     sendError

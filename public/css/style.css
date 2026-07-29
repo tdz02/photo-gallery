@@ -208,3 +208,138 @@ h1{
 .gallery-toolbar a {
     text-decoration: none;
 }
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.like-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+
+    min-height: 40px;
+    padding: 8px 13px;
+
+    border: 1px solid #d9d9d9;
+    border-radius: 999px;
+
+    background: #ffffff;
+    color: #333333;
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.like-button:hover {
+    background: #f7f7f7;
+    border-color: #bbbbbb;
+}
+
+.like-button:active {
+    transform: scale(0.96);
+}
+
+.like-button:focus-visible {
+    outline: 3px solid rgba(0, 100, 255, 0.25);
+    outline-offset: 2px;
+}
+
+.like-button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+.like-icon {
+    width: 20px;
+    height: 20px;
+
+    fill: transparent;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    transition:
+        fill 0.2s ease,
+        stroke 0.2s ease,
+        transform 0.2s ease;
+}
+
+.like-button.is-liked {
+    color: #e63946;
+    border-color: rgba(230, 57, 70, 0.35);
+    background: rgba(230, 57, 70, 0.06);
+}
+
+.like-button.is-liked .like-icon {
+    fill: currentColor;
+}
+
+.like-button.like-animation .like-icon {
+    animation: heart-pop 0.35s ease;
+}
+
+.like-count {
+    color: #000;
+    min-width: 14px;
+    text-align: center;
+}
+
+.like-button.is-loading .like-icon {
+    animation: heart-pulse 0.7s infinite alternate;
+}
+
+.like-button.has-error {
+    animation: like-shake 0.3s ease;
+}
+
+@keyframes heart-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.35);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes heart-pulse {
+    from {
+        transform: scale(0.9);
+    }
+
+    to {
+        transform: scale(1.12);
+    }
+}
+
+@keyframes like-shake {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-3px);
+    }
+
+    75% {
+        transform: translateX(3px);
+    }
+}

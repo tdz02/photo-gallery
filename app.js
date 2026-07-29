@@ -12,12 +12,15 @@ const express = require("express");
 
 const methodOverride = require("method-override");
 
+const authRoutes = require("./routes/auth.routes");
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
+app.use("/auth", authRoutes);       
 
 const PORT = process.env.PORT || 3000;
 

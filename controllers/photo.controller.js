@@ -1,5 +1,5 @@
 const Photo = require("../models/photo.model");
-const { asyncHandler } = require("../middleware/async.middleware");
+const asyncHandler = require("../middleware/async.middleware");
 const Category = require("../models/category.model");
 const { uploadImage, deleteImage } = require("../services/s3.service");
 
@@ -216,6 +216,37 @@ exports.renderEditPage = asyncHandler(async (req, res) => {
         title: "Edit Photo",
         photo,
         categories
+    });
+
+});
+
+exports.likePhoto = asyncHandler(async (req, res) => {
+
+    const photo = await Photo.findByIdAndUpdate(
+        req.params.id,
+        {
+            $inc: {
+                likes: 1
+            }
+        },
+        {
+         returnDocument: "after"
+        }
+    );
+
+    if (!photo) {
+        return res.status(404).json({
+            success: false,
+            message: "Photo not found"
+        });
+    }
+
+    res.json({
+
+        success: true,
+
+        likes: photo.likes
+
     });
 
 });
