@@ -174,3 +174,37 @@ h1{
     color: white;
     border-color: #222;
 }
+
+.gallery-toolbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 20px 0 30px;
+}
+
+.gallery-toolbar input {
+    width: 100%;
+    max-width: 420px;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.gallery-toolbar select {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: white;
+}
+
+.gallery-toolbar button,
+.gallery-toolbar a {
+    padding: 10px 16px;
+    border-radius: 6px;
+}
+
+.gallery-toolbar a {
+    text-decoration: none;
+}

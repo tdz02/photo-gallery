@@ -1,125 +1,221 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Photo Gallery</title>
-    <link rel="stylesheet" href="/css/style.css">
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title><%= title || "Photo Gallery" %></title>
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
 </head>
 
 <body>
 
-<h1>Photo Gallery</h1>
-<form
-    action="/gallery"
-    method="GET"
->
+    <main class="gallery-page">
 
-<input
-    type="text"
-    name="search"
-    placeholder="Search photos..."
-    value="<%= search %>"
->
+        <h1>Photo Gallery</h1>
 
-<button type="submit">
+        <!-- Search and sort -->
+        <form
+            action="/gallery"
+            method="GET"
+            class="gallery-toolbar"
+        >
 
-Search
+            <input
+                type="text"
+                name="search"
+                placeholder="Search photos..."
+                value="<%= search || "" %>"
+            >
 
-</button>
+            <select
+                name="sort"
+                onchange="this.form.submit()"
+            >
 
-  <% if (search) { %>
+                <option
+                    value="newest"
+                    <%= sort === "newest" ? "selected" : "" %>
+                >
+                    Newest
+                </option>
 
-        <a href="/gallery">
-            Clear
-        </a>
+                <option
+                    value="oldest"
+                    <%= sort === "oldest" ? "selected" : "" %>
+                >
+                    Oldest
+                </option>
 
-    <% } %>
+                <option
+                    value="title_asc"
+                    <%= sort === "title_asc" ? "selected" : "" %>
+                >
+                    Title A-Z
+                </option>
 
-</form>
+                <option
+                    value="title_desc"
+                    <%= sort === "title_desc" ? "selected" : "" %>
+                >
+                    Title Z-A
+                </option>
 
-<p class="gallery-result-count">
-    Found <%= totalPhotos %> photo(s)
-</p>
+            </select>
 
-<br>
+            <button type="submit">
+                Search
+            </button>
 
-<% if (photos.length === 0) { %>
+            <% if (search || sort !== "newest") { %>
 
-    <p>No photos found.</p>
-
-<% } else { %>
-
-    <div class="gallery">
-
-        <% photos.forEach(photo => { %>
-
-            <div class="card">
-
-                <a href="/photos/view/<%= photo._id %>">
-
-                    <img
-                        src="<%= photo.imageUrl %>"
-                        alt="<%= photo.title %>"
-                    >
-
+                <a
+                    href="/gallery"
+                    class="reset-button"
+                >
+                    Reset
                 </a>
 
-                <h2><%= photo.title %></h2>
+            <% } %>
 
-                <p><%= photo.description %></p>
+        </form>
 
-                <span>
-                    <%= photo.category?.name || "No category" %>
-                </span>
+        <!-- Result count -->
+        <p class="gallery-result-count">
+
+            Found <%= totalPhotos || 0 %>
+
+            <%= totalPhotos === 1 ? "photo" : "photos" %>
+
+        </p>
+
+        <!-- Gallery content -->
+        <% if (!photos || photos.length === 0) { %>
+
+            <div class="empty-gallery">
+
+                <p>No photos found.</p>
+
+                <% if (search) { %>
+
+                    <a href="/gallery">
+                        View all photos
+                    </a>
+
+                <% } %>
 
             </div>
 
-        <% }) %>
+        <% } else { %>
 
-    </div>
+            <div class="gallery">
 
-<% } %>
+                <% photos.forEach(photo => { %>
 
-</div>
+                    <article class="card">
 
-<% if (totalPages > 1) { %>
+                        <a
+                            href="/photos/view/<%= photo._id %>"
+                            class="card-image-link"
+                        >
 
-    <nav class="pagination">
+                            <img
+                                src="<%= photo.imageUrl %>"
+                                alt="<%= photo.title || "Photo" %>"
+                                loading="lazy"
+                                class="card-image"
+                            >
 
-        <% if (currentPage > 1) { %>
+                        </a>
 
-            <a
-                href="/gallery?page=<%= currentPage - 1 %>&search=<%= encodeURIComponent(search) %>"
-            >
-                Previous
-            </a>
+                        <div class="card-content">
+
+                            <h2>
+                                <%= photo.title %>
+                            </h2>
+
+                            <% if (photo.description) { %>
+
+                                <p>
+                                    <%= photo.description %>
+                                </p>
+
+                            <% } %>
+
+                            <span class="card-category">
+
+                                <%= photo.category?.name || "No category" %>
+
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                <% }) %>
+
+            </div>
 
         <% } %>
 
-        <% for (let pageNumber = 1; pageNumber <= totalPages; pageNumber++) { %>
+        <!-- Pagination -->
+        <% if (totalPages > 1) { %>
 
-            <a
-                href="/gallery?page=<%= pageNumber %>&search=<%= encodeURIComponent(search) %>"
-                class="<%= pageNumber === currentPage ? 'active' : '' %>"
+            <nav
+                class="pagination"
+                aria-label="Gallery pagination"
             >
-                <%= pageNumber %>
-            </a>
+
+                <% if (currentPage > 1) { %>
+
+                    <a
+                        href="/gallery?page=<%= currentPage - 1 %>&search=<%= encodeURIComponent(search || "") %>&sort=<%= sort || "newest" %>"
+                    >
+                        Previous
+                    </a>
+
+                <% } %>
+
+                <% for (
+                    let pageNumber = 1;
+                    pageNumber <= totalPages;
+                    pageNumber++
+                ) { %>
+
+                    <a
+                        href="/gallery?page=<%= pageNumber %>&search=<%= encodeURIComponent(search || "") %>&sort=<%= sort || "newest" %>"
+                        class="<%= pageNumber === currentPage ? "active" : "" %>"
+                        aria-current="<%= pageNumber === currentPage ? "page" : "false" %>"
+                    >
+                        <%= pageNumber %>
+                    </a>
+
+                <% } %>
+
+                <% if (currentPage < totalPages) { %>
+
+                    <a
+                        href="/gallery?page=<%= currentPage + 1 %>&search=<%= encodeURIComponent(search || "") %>&sort=<%= sort || "newest" %>"
+                    >
+                        Next
+                    </a>
+
+                <% } %>
+
+            </nav>
 
         <% } %>
 
-        <% if (currentPage < totalPages) { %>
-
-            <a
-                href="/gallery?page=<%= currentPage + 1 %>&search=<%= encodeURIComponent(search) %>"
-            >
-                Next
-            </a>
-
-        <% } %>
-
-    </nav>
-
-<% } %>
+    </main>
 
 </body>
 
