@@ -1,15 +1,23 @@
 const express = require("express");
 const router = express.Router();
 const { requireImage } = require("../middleware/file.middleware");
-
 const photoController = require("../controllers/photo.controller");
-
+const upload = require("../middleware/upload.middleware.js");
 const {
     validateCreatePhoto,
     handleValidationErrors
 } = require("../middleware/validation.middleware"); 
+const {
+    requireAuth
+} = require("../middleware/auth.middleware");
 
-const upload = require("../middleware/upload.middleware.js");
+
+router.get(
+    "/upload",
+     requireAuth,      
+     photoController.renderUploadPage
+    );
+
 
 router.get("/view/:id", photoController.renderPhoto);
 
@@ -37,5 +45,6 @@ router.post(
 router.put("/:id", photoController.updatePhoto);
 
 router.delete("/:id", photoController.deletePhoto);
+
 
 module.exports = router;

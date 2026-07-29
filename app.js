@@ -14,12 +14,39 @@ const methodOverride = require("method-override");
 
 const authRoutes = require("./routes/auth.routes");
 
+const session = require("express-session");
+
+const { MongoStore } = require("connect-mongo");
+
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 app.use(express.static("public"));
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET || "photo-gallery-secret",
+
+        resave: false,
+
+        saveUninitialized: false,
+
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGODB_URI
+        }),
+
+        cookie: {
+            maxAge: 1000 * 60 * 60 * 24 // 1 ngày
+        }
+    })
+);
+
+app.use((req, res, next) => {
+    res.locals.currentUser = req.session.user || null;
+
+    next();
+});
 app.use("/auth", authRoutes);       
 
 const PORT = process.env.PORT || 3000;

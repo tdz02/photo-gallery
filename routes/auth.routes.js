@@ -9,6 +9,8 @@ router.get(
     authController.showRegisterPage
 );
 
+
+
 const {
     registerValidation
 } = require("../middleware/auth.validation");
@@ -25,6 +27,21 @@ router.post(
     handleAuthValidation,
 
     authController.registerUser
+);
+
+router.get(
+    "/login",
+    authController.showLoginPage
+);
+
+router.post(
+    "/login",
+    authController.loginUser
+);
+
+router.post(
+    "/logout",
+    authController.logoutUser
 );
 
 module.exports = router;

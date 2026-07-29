@@ -23,6 +23,53 @@
 
         <h1>Photo Gallery</h1>
 
+        <nav class="auth-navigation">
+
+            <% if (currentUser) { %>
+
+                <div class="auth-user-info">
+
+                    <span>
+                        Logged in as
+                        <strong>
+                            <%= currentUser.username %>
+                        </strong>
+                    </span>
+
+                    <a href="/photos/create">
+                        Upload photo
+                    </a>
+
+                    <form
+                        action="/auth/logout"
+                        method="POST"
+                        class="logout-form"
+                    >
+                        <button type="submit">
+                            Log out
+                        </button>
+                    </form>
+
+                </div>
+
+            <% } else { %>
+
+                <div class="auth-guest-links">
+
+                    <a href="/auth/login">
+                        Log in
+                    </a>
+
+                    <a href="/auth/register">
+                        Register
+                    </a>
+
+                </div>
+
+            <% } %>
+
+        </nav>
+
         <!-- Search and sort -->
         <form
             action="/gallery"
