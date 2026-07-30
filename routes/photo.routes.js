@@ -1,40 +1,53 @@
 const express = require("express");
 const router = express.Router();
-const { requireImage } = require("../middleware/file.middleware");
-const photoController = require("../controllers/photo.controller");
-const upload = require("../middleware/upload.middleware.js");
+
+const {
+    requireImage
+} = require("../middleware/file.middleware");
+
+const photoController =
+    require("../controllers/photo.controller");
+
+const upload =
+    require("../middleware/upload.middleware.js");
+
 const {
     validateCreatePhoto,
     handleValidationErrors
-} = require("../middleware/validation.middleware"); 
+} = require("../middleware/validation.middleware");
+
 const {
     requireAuth,
     requirePhotoOwner
 } = require("../middleware/auth.middleware");
 
-
-
+// Trang upload
 router.get(
     "/upload",
-     requireAuth,      
-     photoController.renderUploadPage
-    );
+    requireAuth,
+    photoController.renderUploadPage
+);
 
+// Ảnh của người đang đăng nhập
 router.get(
     "/mine",
     requireAuth,
     photoController.renderMyPhotos
 );
 
+// Trang chi tiết ảnh
 router.get(
     "/view/:id",
     photoController.renderPhotoDetail
 );
 
-router.get("/view/:id", photoController.renderPhoto);
+// Lấy danh sách ảnh dạng JSON
+router.get(
+    "/",
+    photoController.getAllPhotos
+);
 
-router.get("/", photoController.getAllPhotos);
-
+// Trang chỉnh sửa ảnh
 router.get(
     "/:id/edit",
     requireAuth,
@@ -42,16 +55,10 @@ router.get(
     photoController.renderEditPage
 );
 
-
-
-router.get(
-    "/",
-    photoController.getAllPhotos
-);
-
-
+// Upload ảnh
 router.post(
     "/",
+    requireAuth,
     upload.single("image"),
     requireImage,
     validateCreatePhoto,
@@ -59,12 +66,14 @@ router.post(
     photoController.createPhoto
 );
 
+// Like hoặc bỏ like
 router.post(
     "/:id/like",
     requireAuth,
     photoController.likePhoto
 );
 
+// Cập nhật ảnh
 router.put(
     "/:id",
     requireAuth,
@@ -72,14 +81,18 @@ router.put(
     photoController.updatePhoto
 );
 
-router.delete(
-    "/:id",
+// Xóa ảnh bằng form HTML
+router.post(
+    "/:id/delete",
     requireAuth,
     requirePhotoOwner,
-    photoController.deletePhoto 
+    photoController.deletePhoto
 );
 
-
-router.get("/:id", photoController.getPhotoById);
+// Route động chung phải đặt cuối
+router.get(
+    "/:id",
+    photoController.getPhotoById
+);
 
 module.exports = router;

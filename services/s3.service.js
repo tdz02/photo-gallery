@@ -42,7 +42,7 @@ exports.uploadImage = async (file) => {
         .toLowerCase();
 
     const imageKey =
-        `photos/${Date.now()}-${crypto.randomUUID()}${extension}`;
+    `originals/${Date.now()}-${crypto.randomUUID()}${extension}`;
 
     const contentType =
         file.mimetype === "image/pjpeg"
