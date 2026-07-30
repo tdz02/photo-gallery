@@ -2,6 +2,7 @@ const Photo = require("../models/photo.model");
 const asyncHandler = require("../middleware/async.middleware");
 const Category = require("../models/category.model");
 const { uploadImage, deleteImage } = require("../services/s3.service");
+const mongoose = require("mongoose");
 
 
 exports.createPhoto = asyncHandler(async (req, res) => {
@@ -276,5 +277,26 @@ exports.renderMyPhotos = asyncHandler(async (req, res) => {
     return res.render("my-photos", {
         title: "My Photos",
         photos
+    });
+});
+
+exports.renderPhotoDetail = asyncHandler(async (req, res) => {
+    const photoId = req.params.id;
+
+    if (!mongoose.isValidObjectId(photoId)) {
+        return res.status(400).send("Invalid photo ID");
+    }
+
+    const photo = await Photo.findById(photoId)
+        .populate("category")
+        .populate("owner", "username");
+
+    if (!photo) {
+        return res.status(404).send("Photo not found");
+    }
+
+    return res.render("photo-detail", {
+        title: photo.title,
+        photo
     });
 });

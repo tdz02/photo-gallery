@@ -20,10 +20,15 @@ router.get(
      photoController.renderUploadPage
     );
 
-    router.get(
+router.get(
     "/mine",
     requireAuth,
     photoController.renderMyPhotos
+);
+
+router.get(
+    "/view/:id",
+    photoController.renderPhotoDetail
 );
 
 router.get("/view/:id", photoController.renderPhoto);
@@ -73,6 +78,7 @@ router.delete(
     requirePhotoOwner,
     photoController.deletePhoto 
 );
+
 
 router.get("/:id", photoController.getPhotoById);
 

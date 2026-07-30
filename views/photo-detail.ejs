@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title><%= title || "Photo Details" %></title>
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+</head>
+
+<body>
+
+    <main class="photo-detail-page">
+
+        <nav class="photo-detail-navigation">
+
+            <a href="/gallery">
+                Back to gallery
+            </a>
+
+            <% if (currentUser) { %>
+
+                <a href="/photos/mine">
+                    My Photos
+                </a>
+
+                <a href="/photos/upload">
+                    Upload photo
+                </a>
+
+            <% } %>
+
+        </nav>
+
+        <%
+            const ownerId =
+                photo.owner?._id?.toString() ||
+                photo.owner?.toString();
+
+            const isOwner =
+                currentUser &&
+                ownerId === currentUser.id;
+
+            const hasLiked =
+                currentUser &&
+                Array.isArray(photo.likedBy) &&
+                photo.likedBy.some(
+                    (userId) =>
+                        userId.toString() === currentUser.id
+                );
+        %>
+
+        <article class="photo-detail-card">
+
+            <div class="photo-detail-image-wrapper">
+
+                <img
+                    src="<%= photo.imageUrl %>"
+                    alt="<%= photo.title || "Photo" %>"
+                    class="photo-detail-image"
+                >
+
+            </div>
+
+            <section class="photo-detail-content">
+
+                <h1>
+                    <%= photo.title %>
+                </h1>
+
+                <% if (photo.description) { %>
+
+                    <p class="photo-detail-description">
+                        <%= photo.description %>
+                    </p>
+
+                <% } else { %>
+
+                    <p class="photo-detail-description">
+                        No description provided.
+                    </p>
+
+                <% } %>
+
+                <div class="photo-detail-meta">
+
+                    <p>
+                        Category:
+                        <strong>
+                            <%= photo.category?.name || "No category" %>
+                        </strong>
+                    </p>
+
+                    <p>
+                        Uploaded by:
+                        <strong>
+                            <%= photo.owner?.username || "Unknown user" %>
+                        </strong>
+                    </p>
+
+                    <% if (photo.createdAt) { %>
+
+                        <p>
+                            Uploaded on:
+                            <strong>
+                                <%= new Date(photo.createdAt).toLocaleDateString() %>
+                            </strong>
+                        </p>
+
+                    <% } %>
+
+                </div>
+
+                <div class="photo-detail-actions photo-like-actions">
+
+                    <button
+                        type="button"
+                        class="like-button <%= hasLiked ? "is-liked" : "" %>"
+                        data-id="<%= photo._id %>"
+                        aria-label="Like <%= photo.title || "photo" %>"
+                        aria-pressed="<%= hasLiked ? "true" : "false" %>"
+                        <%= currentUser ? "" : "disabled" %>
+                    >
+
+                        <svg
+                            class="like-icon"
+                            viewBox="0 0 24 24"
+                            aria-hidden="true"
+                        >
+                            <path
+                                d="M12 21s-7.2-4.35-9.45-8.7C.65 8.62 2.28 4 6.63 4A5.43 5.43 0 0 1 12 7.13 5.43 5.43 0 0 1 17.37 4c4.35 0 5.98 4.62 4.08 8.3C19.2 16.65 12 21 12 21Z"
+                            />
+                        </svg>
+
+                        <span
+                            class="like-count"
+                            id="likes-<%= photo._id %>"
+                        >
+                            <%= photo.likes || 0 %>
+                        </span>
+
+                    </button>
+
+                    <% if (!currentUser) { %>
+
+                        <a href="/auth/login">
+                            Log in to like
+                        </a>
+
+                    <% } %>
+
+                    <% if (isOwner) { %>
+
+                        <a
+                            href="/photos/<%= photo._id %>/edit"
+                            class="edit-photo-button"
+                        >
+                            Edit
+                        </a>
+
+                        <form
+                            action="/photos/<%= photo._id %>/delete"
+                            method="POST"
+                            class="delete-photo-form"
+                            onsubmit="return confirm('Delete this photo?');"
+                        >
+
+                            <button
+                                type="submit"
+                                class="delete-photo-button"
+                            >
+                                Delete
+                            </button>
+
+                        </form>
+
+                    <% } %>
+
+                </div>
+
+            </section>
+
+        </article>
+
+    </main>
+
+    <script>
+        const likeButton =
+            document.querySelector(".like-button");
+
+        if (likeButton) {
+            likeButton.addEventListener("click", async () => {
+                if (likeButton.disabled) {
+                    return;
+                }
+
+                const photoId = likeButton.dataset.id;
+
+                const likeCount = document.getElementById(
+                    `likes-${photoId}`
+                );
+
+                likeButton.disabled = true;
+                likeButton.classList.add("is-loading");
+
+                try {
+                    const response = await fetch(
+                        `/photos/${photoId}/like`,
+                        {
+                            method: "POST",
+                            headers: {
+                                Accept: "application/json"
+                            }
+                        }
+                    );
+
+                    const data = await response.json();
+
+                    if (!response.ok || !data.success) {
+                        throw new Error(
+                            data.message ||
+                            "Could not update like"
+                        );
+                    }
+
+                    likeCount.textContent = data.likes;
+
+                    likeButton.classList.toggle(
+                        "is-liked",
+                        data.liked
+                    );
+
+                    likeButton.setAttribute(
+                        "aria-pressed",
+                        data.liked ? "true" : "false"
+                    );
+
+                    likeButton.classList.remove(
+                        "like-animation"
+                    );
+
+                    void likeButton.offsetWidth;
+
+                    likeButton.classList.add(
+                        "like-animation"
+                    );
+                } catch (error) {
+                    console.error(
+                        "Like error:",
+                        error
+                    );
+
+                    alert(error.message);
+                } finally {
+                    likeButton.disabled = false;
+
+                    likeButton.classList.remove(
+                        "is-loading"
+                    );
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

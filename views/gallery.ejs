@@ -39,7 +39,7 @@
                         My Photos
                     </a>
 
-                    <a href="/photos/Upload">
+                    <a href="/photos/upload">
                         Upload photo
                     </a>
 
@@ -221,12 +221,12 @@
                                     ownerId === currentUser.id;
                             %>
 
-                            <div class="card-actions">
+                            <div class="card-actions photo-like-actions">
 
                                 <%
                                     const hasLiked =
                                     currentUser &&
-                                    photo.likedBy &&
+                                    Array.isArray(photo.likedBy) &&
                                     photo.likedBy.some(
                                     (userId) =>
                                      userId.toString() === currentUser.id
@@ -234,14 +234,13 @@
                                 %>
 
                                 <button
-                                type="button"
-                                class="like-button <%= hasLiked ? "is-liked" : "" %>"
-                                data-id="<%= photo._id %>"
-                                aria-label="Like <%= photo.title || "photo" %>"
-                                aria-pressed="<%= hasLiked ? "true" : "false" %>"
-                                <%= currentUser ? "" : "disabled" %>
+                                    type="button"
+                                    class="like-button <%= hasLiked ? "is-liked" : "" %>"
+                                    data-id="<%= photo._id %>"
+                                    aria-label="Like <%= photo.title || "photo" %>"
+                                    aria-pressed="<%= hasLiked ? "true" : "false" %>"
+                                    <%= currentUser ? "" : "disabled" %>
                                 >
-
                                     <svg
                                         class="like-icon"
                                         viewBox="0 0 24 24"
@@ -252,15 +251,12 @@
                                         />
                                     </svg>
 
-                                    
-
                                     <span
                                         class="like-count"
                                         id="likes-<%= photo._id %>"
                                     >
                                         <%= photo.likes || 0 %>
                                     </span>
-
                                 </button>
                                 <% if (isOwner) { %>
 
