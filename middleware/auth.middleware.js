@@ -6,10 +6,10 @@ exports.requireAuth = (req, res, next) => {
         return next();
     }
 
-    const acceptsJson =
+    const wantsJson =
         req.headers.accept?.includes("application/json");
 
-    if (acceptsJson) {
+    if (wantsJson) {
         return res.status(401).json({
             success: false,
             message: "You must log in first"
@@ -35,7 +35,10 @@ exports.requirePhotoOwner = async (req, res, next) => {
 
         const currentUserId = req.session.user.id;
 
-        if (photo.owner?.toString() !== currentUserId) {
+        if (
+            !photo.owner ||
+            photo.owner.toString() !== currentUserId
+        ) {
             return res.status(403).send(
                 "You are not allowed to modify this photo"
             );

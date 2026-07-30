@@ -491,3 +491,44 @@ h1{
 .logout-form button:hover {
     background: #333333;
 }
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.edit-photo-button,
+.delete-photo-button {
+    padding: 8px 14px;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 600;
+}
+
+.edit-photo-button {
+    border: 1px solid #d7d7d7;
+    background: #ffffff;
+    color: #222222;
+    text-decoration: none;
+}
+
+.edit-photo-button:hover {
+    background: #f3f3f3;
+}
+
+.delete-photo-form {
+    margin: 0;
+}
+
+.delete-photo-button {
+    border: 0;
+    background: #c62828;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.delete-photo-button:hover {
+    background: #a91f1f;
+}

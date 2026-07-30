@@ -208,6 +208,15 @@
                                 <%= photo.owner?.username || "Unknown user" %>
                             </strong>
                              </p>
+                             <%
+                                const ownerId =
+                                    photo.owner?._id?.toString() ||
+                                    photo.owner?.toString();
+
+                                const isOwner =
+                                    currentUser &&
+                                    ownerId === currentUser.id;
+                            %>
 
                             <div class="card-actions">
 
@@ -250,6 +259,32 @@
                                     </span>
 
                                 </button>
+                                <% if (isOwner) { %>
+
+                                <a
+                                    href="/photos/<%= photo._id %>/edit"
+                                    class="edit-photo-button"
+                                >
+                                    Edit
+                                </a>
+
+                                <form
+                                    action="/photos/<%= photo._id %>/delete"
+                                    method="POST"
+                                    class="delete-photo-form"
+                                    onsubmit="return confirm('Delete this photo?');"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="delete-photo-button"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            <% } %>
 
                             </div>
 

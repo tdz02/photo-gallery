@@ -71,7 +71,7 @@ exports.updatePhoto = asyncHandler(async (req, res) => {
 
     const { title, description, category } = req.body;
 
-    const photo = await Photo.findById(req.params.id);
+    const photo = req.photo;
 
     if (!photo) {
 
@@ -91,8 +91,7 @@ exports.updatePhoto = asyncHandler(async (req, res) => {
 
 exports.deletePhoto = asyncHandler(async (req, res) => {
 
-    const photo = await Photo.findById(req.params.id);
-
+    const photo = req.photo;
     if (!photo) {
 
         return res.status(404).send("Photo not found");
@@ -207,7 +206,7 @@ exports.renderEditPage = asyncHandler(async (req, res) => {
 
     
 
-    const photo = await Photo.findById(req.params.id);
+    const photo = req.photo;
 
     if (!photo) {
         return res.status(404).send("Photo not found");
