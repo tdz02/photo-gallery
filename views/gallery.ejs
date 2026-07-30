@@ -179,8 +179,8 @@
                         >
 
                             <img
-                                src="<%= photo.imageUrl %>"
-                                alt="<%= photo.title || "Photo" %>"
+                                src="<%= photo.thumbnailUrl || photo.imageUrl %>"
+                                alt="<%= photo.title %>"
                                 loading="lazy"
                                 class="card-image"
                             >

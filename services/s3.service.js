@@ -63,9 +63,21 @@ exports.uploadImage = async (file) => {
     if (file.path) {
         await fs.unlink(file.path).catch(() => {});
     }
+    const originalUrl =
+    `https://${process.env.AWS_BUCKET_NAME}` +
+    `.s3.${process.env.AWS_REGION}.amazonaws.com/${imageKey}`;
 
+    const thumbnailKey =
+    imageKey.replace("originals/", "resized/");
+
+    const thumbnailUrl =
+    `https://${process.env.AWS_BUCKET_NAME}` +
+    `.s3.${process.env.AWS_REGION}.amazonaws.com/${thumbnailKey}`;
     return {
         imageKey,
+        originalUrl,
+        thumbnailKey,
+        thumbnailUrl,
         imageUrl:
             `https://${process.env.AWS_BUCKET_NAME}` +
             `.s3.${process.env.AWS_REGION}.amazonaws.com/${imageKey}`
@@ -73,16 +85,26 @@ exports.uploadImage = async (file) => {
 };
 
 exports.deleteImage = async (imageKey) => {
-
     if (!imageKey) {
         return;
     }
 
-    await s3.send(
-        new DeleteObjectCommand({
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: imageKey
-        })
-    );
+    const thumbnailKey =
+        imageKey.replace("originals/", "resized/");
 
+    await Promise.all([
+        s3.send(
+            new DeleteObjectCommand({
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: imageKey
+            })
+        ),
+
+        s3.send(
+            new DeleteObjectCommand({
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Key: thumbnailKey
+            })
+        )
+    ]);
 };

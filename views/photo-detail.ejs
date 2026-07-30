@@ -64,8 +64,8 @@
             <div class="photo-detail-image-wrapper">
 
                 <img
-                    src="<%= photo.imageUrl %>"
-                    alt="<%= photo.title || "Photo" %>"
+                    src="<%= photo.originalUrl || photo.imageUrl %>"
+                    alt="<%= photo.title %>"
                     class="photo-detail-image"
                 >
 

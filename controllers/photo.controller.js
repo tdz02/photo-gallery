@@ -19,11 +19,13 @@ exports.createPhoto = asyncHandler(async (req, res) => {
     
 
 
-    const { imageUrl, imageKey } = await uploadImage(req.file);
+    const { imageUrl, imageKey,originalUrl,thumbnailUrl } = await uploadImage(req.file);
 
     await Photo.create({
         title,
         description,
+        originalUrl,
+        thumbnailUrl,
         imageUrl,
         imageKey,
         category,

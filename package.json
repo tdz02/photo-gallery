@@ -12,6 +12,8 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "2": "^3.0.0",
+    "22": "^0.0.0",
     "@aws-sdk/client-s3": "^3.1096.0",
     "bcrypt": "^6.0.0",
     "connect-mongo": "^6.0.0",
