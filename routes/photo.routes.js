@@ -20,6 +20,11 @@ router.get(
      photoController.renderUploadPage
     );
 
+    router.get(
+    "/mine",
+    requireAuth,
+    photoController.renderMyPhotos
+);
 
 router.get("/view/:id", photoController.renderPhoto);
 
@@ -32,7 +37,7 @@ router.get(
     photoController.renderEditPage
 );
 
-router.get("/:id", photoController.getPhotoById);
+
 
 router.get(
     "/",
@@ -66,8 +71,9 @@ router.delete(
     "/:id",
     requireAuth,
     requirePhotoOwner,
-    photoController.deletePhoto
+    photoController.deletePhoto 
 );
 
+router.get("/:id", photoController.getPhotoById);
 
 module.exports = router;

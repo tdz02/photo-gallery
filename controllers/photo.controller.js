@@ -262,3 +262,19 @@ exports.likePhoto = asyncHandler(async (req, res) => {
         likes: photo.likes
     });
 });
+
+exports.renderMyPhotos = asyncHandler(async (req, res) => {
+    const userId = req.session.user.id;
+
+    const photos = await Photo.find({
+        owner: userId
+    })
+        .populate("category")
+        .populate("owner", "username")
+        .sort({ createdAt: -1 });
+
+    return res.render("my-photos", {
+        title: "My Photos",
+        photos
+    });
+});

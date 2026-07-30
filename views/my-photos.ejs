@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title><%= title || "My Photos" %></title>
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+</head>
+
+<body>
+
+    <main class="gallery-page">
+
+        <header class="page-header">
+
+            <div>
+                <h1>My Photos</h1>
+
+                <p>
+                    Photos uploaded by
+                    <strong>
+                        <%= currentUser.username %>
+                    </strong>
+                </p>
+            </div>
+
+            <nav class="page-navigation">
+
+                <a href="/gallery">
+                    Back to gallery
+                </a>
+
+                <a href="/photos/upload">
+                    Upload photo
+                </a>
+
+            </nav>
+
+        </header>
+
+        <% if (!photos || photos.length === 0) { %>
+
+            <section class="empty-gallery">
+
+                <h2>You have not uploaded any photos yet.</h2>
+
+                <p>
+                    Upload your first photo to start building your gallery.
+                </p>
+
+                <a
+                    href="/photos/upload"
+                    class="primary-button"
+                >
+                    Upload photo
+                </a>
+
+            </section>
+
+        <% } else { %>
+
+            <p class="gallery-result-count">
+
+                You have uploaded
+
+                <strong>
+                    <%= photos.length %>
+                </strong>
+
+                <%= photos.length === 1 ? "photo" : "photos" %>.
+
+            </p>
+
+            <div class="gallery">
+
+                <% photos.forEach((photo) => { %>
+
+                    <article class="card">
+
+                        <a
+                            href="/photos/view/<%= photo._id %>"
+                            class="card-image-link"
+                        >
+
+                            <img
+                                src="<%= photo.imageUrl %>"
+                                alt="<%= photo.title || "Photo" %>"
+                                loading="lazy"
+                                class="card-image"
+                            >
+
+                        </a>
+
+                        <div class="card-content">
+
+                            <h2>
+                                <%= photo.title %>
+                            </h2>
+
+                            <% if (photo.description) { %>
+
+                                <p class="card-description">
+                                    <%= photo.description %>
+                                </p>
+
+                            <% } %>
+
+                            <span class="card-category">
+                                <%= photo.category?.name || "No category" %>
+                            </span>
+
+                            <p class="photo-like-summary">
+                                Likes:
+                                <strong>
+                                    <%= photo.likes || 0 %>
+                                </strong>
+                            </p>
+
+                            <div class="card-actions">
+
+                                <a
+                                    href="/photos/<%= photo._id %>/edit"
+                                    class="edit-photo-button"
+                                >
+                                    Edit
+                                </a>
+
+                                <form
+                                    action="/photos/<%= photo._id %>/delete"
+                                    method="POST"
+                                    class="delete-photo-form"
+                                    onsubmit="return confirm('Delete this photo?');"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="delete-photo-button"
+                                    >
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </article>
+
+                <% }) %>
+
+            </div>
+
+        <% } %>
+
+    </main>
+
+</body>
+
+</html>

@@ -532,3 +532,52 @@ h1{
 .delete-photo-button:hover {
     background: #a91f1f;
 }
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 28px;
+}
+
+.page-header h1 {
+    margin-bottom: 8px;
+}
+
+.page-header p {
+    margin: 0;
+}
+
+.page-navigation {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.page-navigation a,
+.primary-button {
+    display: inline-block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: #222222;
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.page-navigation a:hover,
+.primary-button:hover {
+    opacity: 0.85;
+}
+
+.photo-like-summary {
+    margin: 12px 0;
+}
+
+@media (max-width: 700px) {
+    .page-header {
+        flex-direction: column;
+    }
+}
