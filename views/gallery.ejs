@@ -179,10 +179,12 @@
                         >
 
                             <img
-                                src="<%= photo.thumbnailUrl || photo.imageUrl %>"
+                                src="<%= photo.thumbnailUrl || photo.originalUrl || photo.imageUrl %>"
+                                data-fallback-src="<%= photo.originalUrl || photo.imageUrl %>"
                                 alt="<%= photo.title %>"
                                 loading="lazy"
                                 class="card-image"
+                                onerror="if (this.src !== this.dataset.fallbackSrc) { this.src = this.dataset.fallbackSrc; }"
                             >
 
                         </a>
